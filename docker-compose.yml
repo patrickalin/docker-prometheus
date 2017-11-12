@@ -1,0 +1,56 @@
+version: '3.4'
+
+services:
+  prometheus:
+    image: prometheus-image
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=9090
+        - traefik.frontend.rule=Host:prometheus.services.alin.be
+        - traefik.frontend.entryPoints=http,https
+        - traefik.backend.loadbalancer.method=wrr
+    networks:
+      - traefik-net
+
+  node-exporter:
+    image: prom/node-exporter:v0.15.0
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=9100
+        - traefik.frontend.rule=Host:node-exporter.services.alin.be
+        - traefik.frontend.entryPoints=http,https
+        - traefik.backend.loadbalancer.method=wrr
+    volumes:
+        - /proc:/host/proc:ro
+        - /sys:/host/sys:ro
+        - /:/rootfs:ro,rslave
+        - /etc/hostname:/etc/host_hostname
+    environment:
+        - HOST_HOSTNAME=/etc/host_hostname
+    networks:
+      - traefik-net
+      - hostN
+    command: --path.procfs /host/proc --path.sysfs /host/sys --collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$|/)" --collector.textfile.directory /etc/node-exporter/
+
+networks:
+  traefik-net:
+    external:
+      name: traefik-net
+  hostN:
+    external:
+      name: hostN
+
