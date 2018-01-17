@@ -1,5 +1,8 @@
-FROM prom/prometheus:v2.0.0-rc.2
+FROM prom/prometheus:v2.0.0
 COPY prometheus.yml /etc/prometheus/prometheus.yml
+COPY target_up.yml /etc/prometheus/target_up.yml
+COPY site_up.yml /etc/prometheus/site_up.yml
+COPY cpu.yml /etc/prometheus/cpu.yml
 COPY localtime /etc/localtime
 WORKDIR /
 USER root

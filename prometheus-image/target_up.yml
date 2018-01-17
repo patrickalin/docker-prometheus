@@ -1,0 +1,10 @@
+groups:
+-  name: my-group-name
+   rules:
+   - alert: TargetDown
+     expr: up == 0
+     for: 1m
+     labels:
+       severity: critical
+     annotations:
+       description: "Target down {{ $labels.instance }} / Job: {{ $labels.job }} / Value : {{ .Value }}"

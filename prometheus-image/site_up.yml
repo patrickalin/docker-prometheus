@@ -1,0 +1,10 @@
+groups:
+- name: mygroupname2
+  rules:
+  - alert: urlOk
+    expr: probe_success != 1
+    for: 1m
+    labels:
+       severity: critical
+    annotations:
+       description: "Site down {{ $labels.instance }} / Error : {{ .Value }}"

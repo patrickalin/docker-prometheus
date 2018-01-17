@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.5'
 
 services:
   prometheus:
@@ -43,14 +43,46 @@ services:
         - HOST_HOSTNAME=/etc/host_hostname
     networks:
       - traefik-net
-      - hostN
     command: --path.procfs /host/proc --path.sysfs /host/sys --collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$|/)" --collector.textfile.directory /etc/node-exporter/
+
+  alertmanager:
+    image: alertmanager-image
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=9093
+        - traefik.frontend.rule=Host:alertmanager.services.alin.be
+        - traefik.frontend.entryPoints=http,https
+        - traefik.backend.loadbalancer.method=wrr
+    networks:
+        - traefik-net
+    command: --web.external-url="http://alertmanager.services.alin.be/" --config.file="/etc/alertmanager/config.yml"
+
+  blackbox:
+    image: blackbox-image
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=9115
+        - traefik.frontend.rule=Host:blackbox.services.alin.be
+        - traefik.frontend.entryPoints=http,https
+        - traefik.backend.loadbalancer.method=wrr
+    networks:
+      - traefik-net
 
 networks:
   traefik-net:
     external:
       name: traefik-net
-  hostN:
-    external:
-      name: hostN
-
