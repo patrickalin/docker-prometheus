@@ -1,4 +1,4 @@
-FROM prom/prometheus:v2.0.0
+FROM prom/prometheus:v2.2.0-rc.0
 COPY prometheus.yml /etc/prometheus/prometheus.yml
 COPY target_up.yml /etc/prometheus/target_up.yml
 COPY site_up.yml /etc/prometheus/site_up.yml

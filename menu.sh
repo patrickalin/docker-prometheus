@@ -4,6 +4,7 @@ SERVICE="prometheus"
 IMAGE="$SERVICE-image"
 IMAGE0="alertmanager-image"
 IMAGE1="blackbox-image"
+IMAGE2="node-exporter-image"
 
 OPTION=$(whiptail --title $SERVICE --menu "Choose your option" 15 60 5 \
 "0" "Build $SERVICE" \
@@ -28,6 +29,9 @@ case "$OPTION" in
     cd ../$IMAGE1
     docker build -t $IMAGE1 .
     docker tag $IMAGE registry-srv.services.alin.be/$IMAGE1
+    cd ../$IMAGE2
+    docker build -t $IMAGE2 .
+    docker tag $IMAGE registry-srv.services.alin.be/$IMAGE2
     ;;
 1)  docker stack remove  $SERVICE
     sleep 3

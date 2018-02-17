@@ -1,4 +1,4 @@
-FROM prom/alertmanager:v0.13.0
+FROM prom/alertmanager:v0.14.0
 COPY config.yml /etc/alertmanager/config.yml
 COPY localtime /etc/localtime
 WORKDIR /

@@ -1,7 +1,7 @@
 global:
-  scrape_interval: 15s
-  scrape_timeout: 10s
-  evaluation_interval: 1m
+  scrape_interval: 1m
+  scrape_timeout: 20s
+  evaluation_interval: 2m
   external_labels:
     cluster: swarm
     monitor: codelab-monitor
@@ -32,7 +32,13 @@ scrape_configs:
         - https://hello.services.alin.be/greeting
         - https://employer.services.alin.be/metrics
         - https://file.services.alin.be/
-        - https://whoami.services.alin.be
+        - https://whoami.services.alin.be/
+        - https://grafana.services.alin.be/login
+        - https://api.services.alin.be/hello
+        - https://api.services.alin.be/employer
+        - https://apidashboard.services.alin.be
+        - https://alertmanager.services.alin.be
+        - https://blackbox.services.alin.be/
   relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -88,10 +94,10 @@ scrape_configs:
     refresh_interval: 30s
     type: A
     port: 8080
-#- job_name: traefik
-#  static_configs:
-#  - targets:
-#    - traefik.services.alin.be:81
-#  basic_auth:
-#    username: admin
-#    password: 
+- job_name: traefik
+  static_configs:
+  - targets:
+    - traefik.services.alin.be
+  basic_auth:
+    username: admin
+    password: 

@@ -2,7 +2,7 @@ groups:
 -  name: cpugroup
    rules:
    - alert: Cpu
-     expr: node_load5 > 2
+     expr: node_load5 > 3.5
      for: 1m
      labels:
        severity: critical

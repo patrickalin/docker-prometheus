@@ -20,9 +20,8 @@ services:
       - traefik-net
 
   node-exporter:
-    image: prom/node-exporter:v0.15.0
+    image: node-exporter-image
     deploy:
-      mode: global
       resources:
         limits:
           cpus: "0.1"
