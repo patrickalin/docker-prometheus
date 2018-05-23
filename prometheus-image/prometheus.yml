@@ -26,21 +26,21 @@ scrape_configs:
   static_configs:
       - targets:
         - http://traefik.services.alin.be/ping
-        - https://visualizer.services.alin.be/
+#        - https://visualizer.services.alin.be/
         - https://helloworld.services.alin.be/
         - https://portainer.services.alin.be/
         - https://hello.services.alin.be/greeting
         - https://employer.services.alin.be/metrics
         - https://file.services.alin.be/
-        - https://whoami.services.alin.be/
+#        - https://whoami.services.alin.be/
         - https://grafana.services.alin.be/login
         - https://api.services.alin.be/hello
         - https://api.services.alin.be/employer
-        - https://apidashboard.services.alin.be
+        - https://apidashboard.services.alin.be/healthz
         - https://alertmanager.services.alin.be
         - https://blackbox.services.alin.be/
-        - https://minio-exporter.services.alin.be
-        - https://minio.serices.alin.be
+        - https://homeassistant.services.alin.be/
+#        - https://minio-exporter.services.alin.be
   relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -57,6 +57,7 @@ scrape_configs:
       - targets:
         - https://documentation.services.alin.be    # Reverse proxy test
         - https://cadvisor.services.alin.be
+        - https://minio.services.alin.be/
   relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
@@ -84,12 +85,12 @@ scrape_configs:
 - job_name: docker
   static_configs:
   - targets:
-    - 192.168.1.65:9323
+    - morpheus.alin.be:9323
 
-- job_name: minio
-  static_configs:
-  - targets:
-    - minio-exporter.services.alin.be
+#- job_name: minio
+#  static_configs:
+#  - targets:
+#    - minio-exporter.services.alin.be
 
 - job_name: cadvisor
   static_configs:

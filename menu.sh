@@ -1,16 +1,27 @@
 #!/bin/bash
+# v0.3
+DIRECTORY=$(cd `dirname $0` && pwd)
+cd $DIRECTORY
 
-SERVICE="prometheus"
+set -e
+
+
+SERVICE="$(basename `pwd` | cut -d'-' -f 2)"
 IMAGE="$SERVICE-image"
-IMAGE0="alertmanager-image"
-IMAGE1="blackbox-image"
-IMAGE2="node-exporter-image"
 
-OPTION=$(whiptail --title $SERVICE --menu "Choose your option" 15 60 5 \
-"0" "Build $SERVICE" \
-"1" "(Re)Start service $SERVICE" \
-"2" "Stop service $SERVICE" 3>&1 1>&2 2>&3)
- 
+if [ -d "$IMAGE" ]; then
+source ./$IMAGE/env
+FROM="($IMAGE_SRC : $TAG_SRC)"
+OPTION=$(whiptail --title $SERVICE --menu "Choose your option" 15 60 4 \
+"1" "Build from $FROM" \
+"2" "(Re)Start service $SERVICE" \
+"3" "Stop service $SERVICE" 3>&1 1>&2 2>&3)
+else
+OPTION=$(whiptail --title $SERVICE --menu "Choose your option" 15 60 4 \
+"2" "(Re)Start service $SERVICE" \
+"3" "Stop service $SERVICE" 3>&1 1>&2 2>&3)
+fi
+
 exitstatus=$?
 if [ $exitstatus = 0 ]; then
     echo "Your chosen option:" $OPTION
@@ -20,23 +31,18 @@ fi
 
 case "$OPTION" in
 
-0)  cd $IMAGE
-    docker build -t $IMAGE .
-    docker tag $IMAGE registry-srv.services.alin.be/$IMAGE 
-    cd ../$IMAGE0
-    docker build -t $IMAGE0 .
-    docker tag $IMAGE registry-srv.services.alin.be/$IMAGE0
-    cd ../$IMAGE1
-    docker build -t $IMAGE1 .
-    docker tag $IMAGE registry-srv.services.alin.be/$IMAGE1
-    cd ../$IMAGE2
-    docker build -t $IMAGE2 .
-    docker tag $IMAGE registry-srv.services.alin.be/$IMAGE2
-    ;;
-1)  docker stack remove  $SERVICE
-    sleep 3
-    docker stack deploy --compose-file docker-compose.yml $SERVICE
+1)  $IMAGE/buildImage.sh
+    echo "######################"
+    source $IMAGE/env
     ;;
 2)  docker stack remove  $SERVICE
+    sleep 3
+    docker stack deploy --compose-file docker-compose.yml $SERVICE
+    if [ -d "$IMAGE" ]; then
+    echo "######################"
+    source $IMAGE/env
+    fi
+    ;;
+3)  docker stack remove  $SERVICE
     ;;
 esac

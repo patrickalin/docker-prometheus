@@ -1,6 +1,4 @@
-# Don't edit this file, user DockerfileTemplate and buildImage.sh
-###############################################
-FROM registry.services.alin.be/prom/blackbox-exporter:v0.12.0
+FROM $REGISTRY/$IMAGE_SRC:$TAG_SRC
 COPY config.yml /etc/blackbox_exporter/config.yml
 COPY localtime /etc/localtime
 WORKDIR /

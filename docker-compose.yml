@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   prometheus:
-    image: prometheus-image
+    image: registry.services.alin.be/prometheus-alin:v1
     deploy:
       replicas: 1
       resources:
@@ -11,16 +11,11 @@ services:
           memory: 50M
       restart_policy:
         condition: on-failure
-      labels:
-        - traefik.port=9090
-        - traefik.frontend.rule=Host:prometheus.services.alin.be
-        - traefik.frontend.entryPoints=http,https
-        - traefik.backend.loadbalancer.method=wrr
     networks:
       - traefik-net
 
   node-exporter:
-    image: node-exporter-image
+    image: registry.services.alin.be/node-exporter-alin:v1
     deploy:
       resources:
         limits:
@@ -45,7 +40,7 @@ services:
     command: --path.procfs /host/proc --path.sysfs /host/sys --collector.filesystem.ignored-mount-points "^/(sys|proc|dev|host|etc)($$|/)" --collector.textfile.directory /etc/node-exporter/
 
   alertmanager:
-    image: alertmanager-image
+    image: registry.services.alin.be/alertmanager-alin:v1
     deploy:
       replicas: 1
       resources:
@@ -64,7 +59,7 @@ services:
     command: --web.external-url="http://alertmanager.services.alin.be/" --config.file="/etc/alertmanager/config.yml"
 
   blackbox:
-    image: blackbox-image
+    image: registry.services.alin.be/blackbox-alin:v1
     deploy:
       replicas: 1
       resources:
@@ -76,6 +71,26 @@ services:
       labels:
         - traefik.port=9115
         - traefik.frontend.rule=Host:blackbox.services.alin.be
+        - traefik.frontend.entryPoints=http,https
+        - traefik.backend.loadbalancer.method=wrr
+    networks:
+      - traefik-net
+
+  prometheus-nginx:
+    image: registry.services.alin.be/prometheus-nginx-alin:v1
+    depends_on: 
+      - prometheus
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.port=80
+        - traefik.frontend.rule=Host:prometheus.services.alin.be
         - traefik.frontend.entryPoints=http,https
         - traefik.backend.loadbalancer.method=wrr
     networks:

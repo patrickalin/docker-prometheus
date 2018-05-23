@@ -1,6 +1,4 @@
-# Don't edit this file, user DockerfileTemplate and buildImage.sh
-###############################################
-FROM registry.services.alin.be/prom/prometheus:v2.2.0
+FROM $REGISTRY/$IMAGE_SRC:$TAG_SRC
 COPY prometheus.yml /etc/prometheus/prometheus.yml
 COPY target_up.yml /etc/prometheus/target_up.yml
 COPY site_up.yml /etc/prometheus/site_up.yml
