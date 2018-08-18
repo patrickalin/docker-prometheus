@@ -4,7 +4,7 @@ GREEN='\e[1;32m'
 NC='\e[0m'
 
 IMAGE_SRC=prom/alertmanager
-TAG_SRC=v0.15.0-rc.0
+TAG_SRC=v0.15.0-rc.3
 IMAGE_DEST=alertmanager
 TAG_DEST=v1
 REGISTRY=registry.services.alin.be

@@ -1,6 +1,6 @@
 # Don't edit this file, user DockerfileTemplate and buildImage.sh
 ###############################################
-FROM registry.services.alin.be/prom/node-exporter:v0.15.2
+FROM registry.services.alin.be/prom/node-exporter:v0.16.0
 COPY localtime /etc/localtime
 WORKDIR /
 USER root

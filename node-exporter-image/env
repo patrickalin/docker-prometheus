@@ -4,7 +4,7 @@ GREEN='\e[1;32m'
 NC='\e[0m'
 
 IMAGE_SRC=prom/node-exporter
-TAG_SRC=v0.15.2
+TAG_SRC=v0.16.0
 IMAGE_DEST=node-exporter
 TAG_DEST=v1
 REGISTRY=registry.services.alin.be

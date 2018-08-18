@@ -1,6 +1,6 @@
 # Don't edit this file, user DockerfileTemplate and buildImage.sh
 ###############################################
-FROM registry.services.alin.be/nginx:1.13.9-alpine
+FROM registry.services.alin.be/nginx:1.13.12-alpine
 COPY .htpasswd /etc/nginx/.htpasswd
 COPY conf.d /etc/nginx/conf.d/
 COPY localtime /etc/localtime
